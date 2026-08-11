@@ -238,9 +238,9 @@ void runInMainThread(SEL method, id object) {
 void setIcon(const char* iconBytes, int length, bool template) {
   NSData* buffer = [NSData dataWithBytes: iconBytes length:length];
   NSImage *image = [[NSImage alloc] initWithData:buffer];
-  // 18pt is the common size for menu bar icons, the upstream 16pt renders
+  // Render at the full menu bar height, the upstream 16pt renders
   // noticeably small in the menu bar
-  [image setSize:NSMakeSize(18, 18)];
+  [image setSize:NSMakeSize(22, 22)];
   image.template = template;
   runInMainThread(@selector(setIcon:), (id)image);
 }
