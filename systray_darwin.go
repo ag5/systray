@@ -21,10 +21,11 @@ func SetTemplateIcon(templateIconBytes []byte, regularIconBytes []byte) {
 	C.setIcon(cstr, (C.int)(len(templateIconBytes)), true)
 }
 
-// SetBadgeIcon overlays an image on the top-right of the status item icon.
-// The badge is rendered separately so template icons continue adapting to the
-// current macOS appearance. An empty slice removes the badge. On other
-// platforms SetBadgeIcon is a no-op.
+// SetBadgeIcon overlays an image across the status item icon bounds. Use a
+// transparent image matching the base icon dimensions to control the badge's
+// size and position. The overlay is rendered separately so template icons
+// continue adapting to the current macOS appearance. An empty slice removes
+// the badge. On other platforms SetBadgeIcon is a no-op.
 func SetBadgeIcon(iconBytes []byte) {
 	if len(iconBytes) == 0 {
 		C.setBadgeIcon(nil, 0)

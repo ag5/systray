@@ -126,16 +126,7 @@ withParentMenuId: (int)theParentMenuId
     return;
   }
 
-  const CGFloat badgeSize = 8.0;
-  const CGFloat badgeY = statusItem.button.isFlipped
-    ? NSMinY(imageRect)
-    : NSMaxY(imageRect) - badgeSize;
-  badgeView.frame = NSMakeRect(
-    NSMaxX(imageRect) - badgeSize,
-    badgeY,
-    badgeSize,
-    badgeSize
-  );
+  badgeView.frame = imageRect;
   [badgeView setNeedsDisplay:YES];
 }
 

@@ -15,7 +15,8 @@ func main() {
 
 func onReady() {
 	systray.SetIcon(icon.Data)
-	// On macOS, overlay badge PNG bytes without disabling template-icon tinting.
+	// On macOS, overlay a transparent PNG matching the base icon dimensions
+	// without disabling template-icon tinting.
 	systray.SetBadgeIcon(notificationBadgePNG)
 	systray.SetTitle("Awesome App")
 	systray.SetTooltip("Pretty awesome超级棒")
