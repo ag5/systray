@@ -127,9 +127,12 @@ withParentMenuId: (int)theParentMenuId
   }
 
   const CGFloat badgeSize = 8.0;
+  const CGFloat badgeY = statusItem.button.isFlipped
+    ? NSMinY(imageRect)
+    : NSMaxY(imageRect) - badgeSize;
   badgeView.frame = NSMakeRect(
     NSMaxX(imageRect) - badgeSize,
-    NSMaxY(imageRect) - badgeSize,
+    badgeY,
     badgeSize,
     badgeSize
   );
