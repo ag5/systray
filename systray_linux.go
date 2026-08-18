@@ -8,6 +8,11 @@ func SetTemplateIcon(templateIconBytes []byte, regularIconBytes []byte) {
 	SetIcon(regularIconBytes)
 }
 
+// SetBadgeIcon overlays an image on the status item icon.
+// Badge overlays are currently only supported on macOS.
+func SetBadgeIcon(iconBytes []byte) {
+}
+
 // SetIcon sets the icon of a menu item. Only works on macOS and Windows.
 // iconBytes should be the content of .ico/.jpg/.png
 func (item *MenuItem) SetIcon(iconBytes []byte) {

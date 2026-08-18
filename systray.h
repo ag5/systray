@@ -7,6 +7,7 @@ void registerSystray(void);
 int nativeLoop(void);
 
 void setIcon(const char* iconBytes, int length, bool template);
+void setBadgeIcon(const char* iconBytes, int length);
 void setMenuItemIcon(const char* iconBytes, int length, int menuId, bool template);
 void setTitle(char* title);
 void setTooltip(char* tooltip);

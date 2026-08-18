@@ -21,6 +21,20 @@ func SetTemplateIcon(templateIconBytes []byte, regularIconBytes []byte) {
 	C.setIcon(cstr, (C.int)(len(templateIconBytes)), true)
 }
 
+// SetBadgeIcon overlays an image on the top-right of the status item icon.
+// The badge is rendered separately so template icons continue adapting to the
+// current macOS appearance. An empty slice removes the badge. On other
+// platforms SetBadgeIcon is a no-op.
+func SetBadgeIcon(iconBytes []byte) {
+	if len(iconBytes) == 0 {
+		C.setBadgeIcon(nil, 0)
+		return
+	}
+
+	cstr := (*C.char)(unsafe.Pointer(&iconBytes[0]))
+	C.setBadgeIcon(cstr, C.int(len(iconBytes)))
+}
+
 // SetIcon sets the icon of a menu item. Only works on macOS and Windows.
 // iconBytes should be the content of .ico/.jpg/.png
 func (item *MenuItem) SetIcon(iconBytes []byte) {

@@ -13,6 +13,15 @@
 
 #endif
 
+@interface StatusBadgeImageView : NSImageView
+@end
+
+@implementation StatusBadgeImageView
+- (NSView *)hitTest:(NSPoint)point {
+  return nil;
+}
+@end
+
 @interface MenuItem : NSObject
 {
   @public
@@ -53,6 +62,8 @@ withParentMenuId: (int)theParentMenuId
 @interface AppDelegate: NSObject <NSApplicationDelegate>
   - (void) add_or_update_menu_item:(MenuItem*) item;
   - (IBAction)menuHandler:(id)sender;
+  - (void)setBadgeIcon:(NSImage *)image;
+  - (void)updateBadgeFrame;
   @property (assign) IBOutlet NSWindow *window;
   @end
 
@@ -61,6 +72,7 @@ withParentMenuId: (int)theParentMenuId
   NSStatusItem *statusItem;
   NSMenu *menu;
   NSCondition* cond;
+  StatusBadgeImageView *badgeView;
 }
 
 @synthesize window = _window;
@@ -82,11 +94,46 @@ withParentMenuId: (int)theParentMenuId
 - (void)setIcon:(NSImage *)image {
   statusItem.button.image = image;
   [self updateTitleButtonStyle];
+  [self updateBadgeFrame];
 }
 
 - (void)setTitle:(NSString *)title {
   statusItem.button.title = title;
   [self updateTitleButtonStyle];
+  [self updateBadgeFrame];
+}
+
+- (void)setBadgeIcon:(NSImage *)image {
+  if (badgeView == nil) {
+    badgeView = [[StatusBadgeImageView alloc] initWithFrame:NSZeroRect];
+    badgeView.imageScaling = NSImageScaleProportionallyUpOrDown;
+    [statusItem.button addSubview:badgeView
+                       positioned:NSWindowAbove
+                       relativeTo:nil];
+  }
+  badgeView.image = image;
+  [self updateBadgeFrame];
+}
+
+- (void)updateBadgeFrame {
+  if (badgeView == nil) {
+    return;
+  }
+
+  NSRect imageRect = [statusItem.button.cell imageRectForBounds:statusItem.button.bounds];
+  badgeView.hidden = badgeView.image == nil || NSIsEmptyRect(imageRect);
+  if (badgeView.hidden) {
+    return;
+  }
+
+  const CGFloat badgeSize = 8.0;
+  badgeView.frame = NSMakeRect(
+    NSMaxX(imageRect) - badgeSize,
+    NSMaxY(imageRect) - badgeSize,
+    badgeSize,
+    badgeSize
+  );
+  [badgeView setNeedsDisplay:YES];
 }
 
 -(void)updateTitleButtonStyle {
@@ -243,6 +290,16 @@ void setIcon(const char* iconBytes, int length, bool template) {
   [image setSize:NSMakeSize(22, 22)];
   image.template = template;
   runInMainThread(@selector(setIcon:), (id)image);
+}
+
+void setBadgeIcon(const char* iconBytes, int length) {
+  NSImage *image = nil;
+  if (iconBytes != NULL && length > 0) {
+    NSData *buffer = [NSData dataWithBytes:iconBytes length:length];
+    image = [[NSImage alloc] initWithData:buffer];
+    image.template = NO;
+  }
+  runInMainThread(@selector(setBadgeIcon:), (id)image);
 }
 
 void setMenuItemIcon(const char* iconBytes, int length, int menuId, bool template) {

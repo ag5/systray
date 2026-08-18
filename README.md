@@ -15,6 +15,8 @@ func main() {
 
 func onReady() {
 	systray.SetIcon(icon.Data)
+	// On macOS, overlay badge PNG bytes without disabling template-icon tinting.
+	systray.SetBadgeIcon(notificationBadgePNG)
 	systray.SetTitle("Awesome App")
 	systray.SetTooltip("Pretty awesome超级棒")
 	mQuit := systray.AddMenuItem("Quit", "Quit the whole app")

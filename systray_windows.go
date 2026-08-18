@@ -1,3 +1,4 @@
+//go:build windows
 // +build windows
 
 package systray
@@ -853,6 +854,11 @@ func SetIcon(iconBytes []byte) {
 // .ico/.jpg/.png for other platforms.
 func SetTemplateIcon(templateIconBytes []byte, regularIconBytes []byte) {
 	SetIcon(regularIconBytes)
+}
+
+// SetBadgeIcon overlays an image on the status item icon.
+// Badge overlays are currently only supported on macOS.
+func SetBadgeIcon(iconBytes []byte) {
 }
 
 // SetTitle sets the systray title, only available on Mac and Linux.
